@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
 
     for(var pokemon in pokemons){
-      pokemon.imagem = await _buscarImagem(pokemon.name!);
+      pokemon = await _buscarImagem(pokemon!);
     }
 
      setState(() {
@@ -50,14 +50,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<String> _buscarImagem(String name) async {
+  Future<Pokemon> _buscarImagem(Pokemon pokemon) async {
+    String name = pokemon.name!;
+    
     try{
       final dio = Dio();
       final response = await dio.get("https://pokeapi.co/api/v2/pokemon/$name/");
 
-      return response.data["sprites"]["front_default"];
+      pokemon.imagem = response.data["sprites"]["front_default"];
+      pokemon.id = response.data["id"];
+      return pokemon;
     } catch (e){
-      return "https://ih1.redbubble.net/image.4905811472.8675/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg";
+      pokemon.imagem = "https://ih1.redbubble.net/image.4905811472.8675/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg";
+      return pokemon;
     }
   }
   
@@ -127,6 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               children: [
                                 Text("Pokemon: ${pokemon.name}"),
                                 Text("Descrição: ${pokemon.url}"),
+                                Text("IDex: ${pokemon.id}"),
                               ],
                             ),
                           ),
