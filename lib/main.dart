@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
-          // Barra de pesquisa
+
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -106,7 +106,14 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
 
           Expanded(
-            child: ListView.builder(
+            child:filteredPokemons.isEmpty
+      ? const Center(
+          child: Text(
+            "Nenhum Pokémon encontrado 😢",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        )
+            : ListView.builder(
               itemCount: filteredPokemons.length,
               itemBuilder: (context, index) {
                 final pokemon = filteredPokemons[index];
